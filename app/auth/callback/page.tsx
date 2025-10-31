@@ -26,7 +26,6 @@ export default function AuthCallback() {
       return;
     }
 
-    // Wyślij code do backendu
     sendCodeToBackend(code);
   }, [searchParams]);
 
@@ -49,14 +48,14 @@ export default function AuthCallback() {
         setStatus('success');
         setMessage('Login successful!');
         
-        // Zapisz token (w prawdziwej apce użyj cookies/localStorage)
-        console.log('User:', data.user);
-        console.log('Token:', data.token);
+        // Zapisz token i user
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
 
-        // Przekieruj na stronę główną z danymi
+        // Przekieruj na dashboard
         setTimeout(() => {
-          router.push(`/?success=true&email=${data.user.email}`);
-        }, 2000);
+          router.push('/dashboard');
+        }, 1000);
       } else {
         setStatus('error');
         setMessage(data.error || 'Login failed');
@@ -81,7 +80,7 @@ export default function AuthCallback() {
           <p className="text-center text-gray-700">{message}</p>
           {status === 'success' && (
             <p className="text-sm text-center text-gray-500 mt-4">
-              Redirecting to home...
+              Redirecting to dashboard...
             </p>
           )}
         </CardContent>
