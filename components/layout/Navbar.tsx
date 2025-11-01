@@ -14,21 +14,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AuthService } from '@/lib/auth';
 
 export default function Navbar() {
     const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            setUser(JSON.parse(userData));
+        const user = AuthService.getUser();
+        if (user) {
+            setUser(user);
         }
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        AuthService.logout();
         router.push('/');
     };
 

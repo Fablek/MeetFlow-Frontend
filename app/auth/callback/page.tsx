@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AuthService } from '@/lib/auth';
 
 export default function AuthCallback() {
   const searchParams = useSearchParams();
@@ -49,8 +50,7 @@ export default function AuthCallback() {
         setMessage('Login successful!');
         
         // Zapisz token i user
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        AuthService.setAuth(data.token, data.user);
 
         // Przekieruj na dashboard
         setTimeout(() => {

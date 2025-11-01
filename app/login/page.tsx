@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AuthService } from '@/lib/auth';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -48,8 +49,7 @@ export default function LoginPage() {
 
             if (response.ok) {
                 // Save token
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                AuthService.setAuth(data.token, data.user);
 
                 // Redirect to dashboard
                 router.push('/dashboard');

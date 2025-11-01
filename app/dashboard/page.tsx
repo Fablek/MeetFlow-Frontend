@@ -5,21 +5,20 @@ import { User } from '@/types';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AuthService } from '@/lib/auth';
 
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
-
-    if (!token || !userData) {
+    if (!AuthService.isAuthenticated()) {
       router.push('/login');
       return;
     }
 
-    setUser(JSON.parse(userData));
+    const user = AuthService.getUser();
+    setUser(user);
   }, [router]);
 
   if (!user) {
