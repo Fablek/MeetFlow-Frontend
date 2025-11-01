@@ -60,9 +60,10 @@ export default function AuthCallback() {
         setStatus('error');
         setMessage(data.error || 'Login failed');
       }
-    } catch (err: any) {
+    } catch (err) {
       setStatus('error');
-      setMessage(`Network error: ${err.message}`);
+      const errorMessage = err instanceof Error ? err.message : 'Network error. Please try again.';
+      setMessage(errorMessage);
     }
   };
 

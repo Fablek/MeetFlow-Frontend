@@ -74,8 +74,8 @@ export default function RegisterPage() {
             } else {
                 setError(data.error || 'Registration failed');
             }
-        } catch (err: any) {
-            setError('Network error. Please try again.');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Network error. Please try again.');
         } finally {
             setLoading(false);
         }
