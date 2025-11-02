@@ -63,7 +63,7 @@ export default function Navbar() {
                                 Dashboard
                             </Link>
                             <Link 
-                                href="/event-types" 
+                                href="/dashboard/event-types" 
                                 className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
                             >
                                 Event Types
