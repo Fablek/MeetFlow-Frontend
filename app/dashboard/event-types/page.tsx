@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AuthService } from '@/lib/auth';
 import { EventType } from '@/types';
 import { Plus, Clock, MapPin, Edit, Trash2, ExternalLink } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function EventTypesPage() {
     const router = useRouter();
@@ -46,27 +47,37 @@ export default function EventTypesPage() {
     };
 
     const handleDelete = async (id: string, name: string) => {
-        if (!confirm(`Are you sure you want to delete "${name}"?`)) {
-            return;
-        }
+        // Confirmation toast with action buttons
+        toast.warning(`Delete "${name}"?`, {
+            description: 'This action cannot be undone.',
+            action: {
+            label: 'Delete',
+            onClick: async () => {
+                try {
+                const token = AuthService.getToken();
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/event-types/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                    'Authorization': `Bearer ${token}`
+                    }
+                });
 
-        try {
-            const token = AuthService.getToken();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/event-types/${id}`, {
-                method: 'DELETE',
-                headers: {
-                'Authorization': `Bearer ${token}`
+                if (response.ok) {
+                    setEventTypes(eventTypes.filter(et => et.id !== id));
+                    toast.success('Event type deleted successfully');
+                } else {
+                    toast.error('Failed to delete event type');
                 }
-            });
-
-            if (response.ok) {
-                setEventTypes(eventTypes.filter(et => et.id !== id));
-            } else {
-                alert('Failed to delete event type');
+                } catch (err) {
+                toast.error('Network error. Please try again.');
+                }
             }
-        } catch (err) {
-            alert('Network error. Please try again.');
-        }
+            },
+            cancel: {
+            label: 'Cancel',
+            onClick: () => {}
+            }
+        });
     };
 
     const getPublicLink = (slug: string) => {
@@ -76,7 +87,10 @@ export default function EventTypesPage() {
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        alert('Link copied to clipboard!');
+        toast.success('Link copied to clipboard!', {
+            description: text,
+            duration: 3000
+        });
     };
 
     return (
