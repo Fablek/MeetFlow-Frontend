@@ -24,3 +24,22 @@ export interface EventType {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Availability {
+  id: string;
+  userId: string;
+  dayOfWeek: number;
+  dayOfWeekName: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DayAvailability {
+  dayOfWeek: number;
+  dayName: string;
+  enabled: boolean;
+  startTime: string;
+  endTime: string;
+}
