@@ -120,3 +120,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* React Day Picker custom styles */
+.rdp-custom {
+  --rdp-accent-color: #3b82f6;
+  --rdp-background-color: #eff6ff;
+}
+
+.rdp-custom .rdp-day_selected {
+  background-color: var(--rdp-accent-color);
+  color: white;
+}
+
+.rdp-custom .rdp-day_today {
+  font-weight: bold;
+  color: var(--rdp-accent-color);
+}
+
+.rdp-custom .rdp-day:hover:not(.rdp-day_selected):not(.rdp-day_disabled) {
+  background-color: var(--rdp-background-color);
+}
