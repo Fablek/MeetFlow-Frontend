@@ -284,8 +284,18 @@ function IntegrationsTab() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [disconnecting, setDisconnecting] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); 
 
   useEffect(() => {
+    // Check if we just connected successfully
+    const oauthSuccess = localStorage.getItem('google_oauth_success');
+    if (oauthSuccess === 'true') {
+      localStorage.removeItem('google_oauth_success');
+      setShowSuccessMessage(true);
+      // Hide message after 5 seconds
+      setTimeout(() => setShowSuccessMessage(false), 5000);
+    }
+    
     fetchIntegrationStatus();
   }, []);
 
@@ -364,6 +374,17 @@ function IntegrationsTab() {
 
   return (
     <div>
+      {/* SUCCESS MESSAGE */}
+      {showSuccessMessage && (
+        <Alert className="mb-6 bg-green-50 text-green-800 border-green-200">
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>
+            Google Calendar connected successfully! Your bookings will now automatically sync.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* ERROR MESSAGE */}
       {error && (
         <Alert variant="destructive" className="mb-6">
           <AlertCircle className="h-4 w-4" />
