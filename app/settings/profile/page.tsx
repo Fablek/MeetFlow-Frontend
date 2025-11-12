@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { User } from '@/types';
 
 export default function SettingsProfilePage() {
   const router = useRouter();
+  const searchParams = useSearchParams(); 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +26,13 @@ export default function SettingsProfilePage() {
     fullName: '',
     username: ''
   });
+
+  useEffect(() => {
+    const tab = searchParams?.get('tab');
+    if (tab === 'integrations') {
+      setActiveTab('integrations');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const userData = AuthService.getUser();
