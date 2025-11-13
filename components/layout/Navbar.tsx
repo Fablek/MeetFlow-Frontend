@@ -74,6 +74,12 @@ export default function Navbar() {
                             >
                                 Availability
                             </Link>
+                            <Link 
+                                href="/dashboard/bookings" 
+                                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+                            >
+                                Bookings
+                            </Link>
                         </div>
                     )}
 
