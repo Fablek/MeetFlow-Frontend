@@ -4,36 +4,38 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  User, 
-  Mail, 
-  Phone,
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  Loader2,
-  Filter
+    Calendar, 
+    Clock, 
+    MapPin, 
+    User, 
+    Mail, 
+    Phone,
+    AlertCircle,
+    CheckCircle,
+    XCircle,
+    Loader2,
+    Filter
 } from 'lucide-react';
 import { AuthService } from '@/lib/auth';
 
 interface Booking {
     id: string;
     eventTypeName: string;
+    eventTypeSlug: string;
     startTime: string;
     endTime: string;
-    attendeeName: string;
-    attendeeEmail: string;
-    attendeePhone?: string;
+    durationMinutes: number;
+    guestName: string;
+    guestEmail: string;
+    guestPhone?: string;
     notes?: string;
     location: string;
-    status: 'confirmed' | 'cancelled';
+    status: string;
     createdAt: string;
 }
 
@@ -86,16 +88,16 @@ export default function BookingsPage() {
         switch (filter) {
             case 'upcoming':
                 filtered = bookings.filter(
-                b => new Date(b.startTime) >= now && b.status === 'confirmed'
+                    b => new Date(b.startTime) >= now && b.status.toLowerCase() === 'confirmed'
                 );
                 break;
             case 'past':
                 filtered = bookings.filter(
-                b => new Date(b.startTime) < now && b.status === 'confirmed'
+                    b => new Date(b.startTime) < now && b.status.toLowerCase() === 'confirmed'
                 );
                 break;
             case 'cancelled':
-                filtered = bookings.filter(b => b.status === 'cancelled');
+                filtered = bookings.filter(b => b.status.toLowerCase() === 'cancelled');
                 break;
             case 'all':
             default:
@@ -114,7 +116,7 @@ export default function BookingsPage() {
     };
 
     const getStatusBadge = (status: string) => {
-        if (status === 'confirmed') {
+        if (status.toLowerCase() === 'confirmed') {
             return (
                 <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
                     <CheckCircle className="h-3 w-3 mr-1" />
@@ -158,13 +160,13 @@ export default function BookingsPage() {
 
     if (loading) {
         return (
-            <ProtectedRoute>
-                <AppLayout>
+        <ProtectedRoute>
+            <AppLayout>
                 <div className="flex items-center justify-center min-h-[400px]">
                     <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                 </div>
-                </AppLayout>
-            </ProtectedRoute>
+            </AppLayout>
+        </ProtectedRoute>
         );
     }
 
@@ -219,8 +221,8 @@ export default function BookingsPage() {
                     {/* Error */}
                     {error && (
                         <Alert variant="destructive" className="mb-6">
-                            <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>{error}</AlertDescription>
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>{error}</AlertDescription>
                         </Alert>
                     )}
 
@@ -233,10 +235,10 @@ export default function BookingsPage() {
                                     No bookings found
                                 </h3>
                                 <p className="text-gray-500 text-center mb-4">
-                                    {filter === 'upcoming' && "You don't have any upcoming meetings."}
-                                    {filter === 'past' && "You don't have any past meetings."}
-                                    {filter === 'cancelled' && "You don't have any cancelled meetings."}
-                                    {filter === 'all' && "You don't have any bookings yet."}
+                                {filter === 'upcoming' && "You don't have any upcoming meetings."}
+                                {filter === 'past' && "You don't have any past meetings."}
+                                {filter === 'cancelled' && "You don't have any cancelled meetings."}
+                                {filter === 'all' && "You don't have any bookings yet."}
                                 </p>
                                 <Button onClick={() => router.push('/dashboard/event-types')}>
                                     Create Event Type
@@ -297,68 +299,70 @@ export default function BookingsPage() {
 
                                                 {/* Attendee info */}
                                                 <div className="border-t pt-4">
-                                                    <p className="text-sm font-medium text-gray-900 mb-2">Attendee</p>
+                                                    <p className="text-sm font-medium text-gray-900 mb-2">Guest</p>
                                                     <div className="space-y-2">
                                                         <div className="flex items-center gap-2 text-sm">
                                                             <User className="h-4 w-4 text-gray-400" />
-                                                            <span className="text-gray-700">{booking.attendeeName}</span>
+                                                            <span className="text-gray-700">{booking.guestName}</span>
                                                         </div>
                                                         <div className="flex items-center gap-2 text-sm">
                                                             <Mail className="h-4 w-4 text-gray-400" />
-                                                            <a href={`mailto:${booking.attendeeEmail}`}
+                              
+                                                            <a href={`mailto:${booking.guestEmail}`}
                                                                 className="text-blue-600 hover:underline"
                                                             >
-                                                                {booking.attendeeEmail}
+                                                                {booking.guestEmail}
                                                             </a>
                                                         </div>
-                                                        {booking.attendeePhone && (
-                                                            <div className="flex items-center gap-2 text-sm">
-                                                                <Phone className="h-4 w-4 text-gray-400" />
-                                                                <a href={`tel:${booking.attendeePhone}`}
-                                                                    className="text-blue-600 hover:underline"
-                                                                >
-                                                                    {booking.attendeePhone}
-                                                                </a>
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    {booking.notes && (
-                                                        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                                                            <p className="text-sm font-medium text-gray-900 mb-1">Notes</p>
-                                                            <p className="text-sm text-gray-600">{booking.notes}</p>
+                                                    {booking.guestPhone && (
+                                                        <div className="flex items-center gap-2 text-sm">
+                                                            <Phone className="h-4 w-4 text-gray-400" />
+                                                        
+                                                            <a href={`tel:${booking.guestPhone}`}
+                                                                className="text-blue-600 hover:underline"
+                                                            >
+                                                                {booking.guestPhone}
+                                                            </a>
                                                         </div>
                                                     )}
                                                 </div>
-                                            </div>
 
-                                            {/* Right side - Actions */}
-                                            <div className="flex flex-col gap-2 lg:ml-4">
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        // TODO: Implement view details
-                                                        console.log('View details:', booking.id);
-                                                    }}
-                                                >
-                                                    View Details
-                                                </Button>
-                                                {booking.status === 'confirmed' &&
-                                                    new Date(booking.startTime) > new Date() && (
-                                                        <Button
-                                                        variant="destructive"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                            // TODO: Implement cancel
-                                                            console.log('Cancel booking:', booking.id);
-                                                        }}
-                                                        >
-                                                            Cancel
-                                                        </Button>
+                                                {booking.notes && (
+                                                    <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+                                                        <p className="text-sm font-medium text-gray-900 mb-1">Notes</p>
+                                                        <p className="text-sm text-gray-600">{booking.notes}</p>
+                                                    </div>
                                                 )}
                                             </div>
                                         </div>
+
+                                        {/* Right side - Actions */}
+                                        <div className="flex flex-col gap-2 lg:ml-4">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => {
+                                                    // TODO: Implement view details
+                                                    console.log('View details:', booking.id);
+                                                }}
+                                            >
+                                                View Details
+                                            </Button>
+                                            {booking.status.toLowerCase() === 'confirmed' &&
+                                                new Date(booking.startTime) > new Date() && (
+                                                    <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        // TODO: Implement cancel
+                                                        console.log('Cancel booking:', booking.id);
+                                                    }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                            )}
+                                        </div>
+                                    </div>
                                     </CardContent>
                                 </Card>
                             ))}
@@ -374,47 +378,47 @@ export default function BookingsPage() {
                                         <div className="p-2 bg-blue-100 rounded-lg">
                                             <Calendar className="h-5 w-5 text-blue-600" />
                                         </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900">
-                                                {bookings.filter(
-                                                b => new Date(b.startTime) >= new Date() && b.status === 'confirmed'
-                                                ).length}
-                                            </p>
-                                            <p className="text-sm text-gray-500">Upcoming</p>
-                                        </div>
+                                    <div>
+                                        <p className="text-2xl font-bold text-gray-900">
+                                            {bookings.filter(
+                                                b => new Date(b.startTime) >= new Date() && b.status.toLowerCase() === 'confirmed'
+                                            ).length}
+                                        </p>
+                                        <p className="text-sm text-gray-500">Upcoming</p>
+                                    </div>
                                     </div>
                                 </CardContent>
                             </Card>
 
                             <Card>
                                 <CardContent className="p-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-green-100 rounded-lg">
-                                            <CheckCircle className="h-5 w-5 text-green-600" />
-                                        </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900">
-                                                {bookings.filter(b => b.status === 'confirmed').length}
-                                            </p>
-                                            <p className="text-sm text-gray-500">Total Confirmed</p>
-                                        </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-green-100 rounded-lg">
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
                                     </div>
+                                    <div>
+                                    <p className="text-2xl font-bold text-gray-900">
+                                        {bookings.filter(b => b.status.toLowerCase() === 'confirmed').length}
+                                    </p>
+                                    <p className="text-sm text-gray-500">Total Confirmed</p>
+                                    </div>
+                                </div>
                                 </CardContent>
                             </Card>
 
                             <Card>
                                 <CardContent className="p-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-red-100 rounded-lg">
-                                            <XCircle className="h-5 w-5 text-red-600" />
-                                        </div>
-                                        <div>
-                                            <p className="text-2xl font-bold text-gray-900">
-                                                {bookings.filter(b => b.status === 'cancelled').length}
-                                            </p>
-                                            <p className="text-sm text-gray-500">Cancelled</p>
-                                        </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-red-100 rounded-lg">
+                                    <XCircle className="h-5 w-5 text-red-600" />
                                     </div>
+                                    <div>
+                                    <p className="text-2xl font-bold text-gray-900">
+                                        {bookings.filter(b => b.status.toLowerCase() === 'cancelled').length}
+                                    </p>
+                                    <p className="text-sm text-gray-500">Cancelled</p>
+                                    </div>
+                                </div>
                                 </CardContent>
                             </Card>
                         </div>
