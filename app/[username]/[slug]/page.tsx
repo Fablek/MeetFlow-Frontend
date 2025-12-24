@@ -93,12 +93,18 @@ export default function BookingPage() {
         setError(null);
 
         try {
+            const startTimeLocal = parseISO(selectedSlot.start);
+            const startTimeUTC = startTimeLocal.toISOString();
+
+            console.log('Local time:', startTimeLocal);
+            console.log('UTC time:', startTimeUTC);
+
             const bookingRequest: CreateBookingRequest = {
                 guestName: formData.guestName,
                 guestEmail: formData.guestEmail,
                 guestPhone: formData.guestPhone || undefined,
                 notes: formData.notes || undefined,
-                startTime: selectedSlot.start
+                startTime: startTimeUTC
             };
 
             const response = await fetch(
