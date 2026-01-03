@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from '@/types'; 
+import { User } from '@/types';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import {
@@ -42,41 +42,40 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="border-b bg-white">
+        <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
+                <div className="flex justify-between h-14">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <Link href={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
-                            <div className="text-2xl">🗓️</div>
-                            <span className="text-xl font-bold text-gray-900">MeetFlow</span>
+                        <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2">
+                            <span className="text-xl font-semibold">MeetFlow</span>
                         </Link>
                     </div>
 
                     {/* Navigation - Center */}
                     {user && (
                         <div className="hidden md:flex items-center space-x-8">
-                            <Link 
-                                href="/dashboard" 
-                                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+                            <Link
+                                href="/dashboard"
+                                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
                             >
                                 Dashboard
                             </Link>
-                            <Link 
-                                href="/dashboard/event-types" 
-                                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+                            <Link
+                                href="/dashboard/event-types"
+                                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
                             >
                                 Event Types
                             </Link>
-                            <Link 
-                                href="/dashboard/availability" 
-                                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+                            <Link
+                                href="/dashboard/availability"
+                                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
                             >
                                 Availability
                             </Link>
-                            <Link 
-                                href="/dashboard/bookings" 
-                                className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+                            <Link
+                                href="/dashboard/bookings"
+                                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
                             >
                                 Bookings
                             </Link>
@@ -84,7 +83,7 @@ export default function Navbar() {
                     )}
 
                     {/* Right side */}
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center gap-2">
                         {user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>

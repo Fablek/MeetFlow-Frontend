@@ -79,11 +79,13 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-            <Card key="login-form" className="w-full max-w-md shadow-lg">
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+            <Card key="login-form" className="w-full max-w-md">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
-                    <CardDescription className="text-center">
+                    <CardTitle className="text-2xl font-semibold">
+                        Welcome back
+                    </CardTitle>
+                    <CardDescription>
                         Sign in to your MeetFlow account
                     </CardDescription>
                 </CardHeader>
@@ -133,7 +135,7 @@ export default function LoginPage() {
                     <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
                     </div>
                 </div>
 
@@ -166,9 +168,9 @@ export default function LoginPage() {
                 </Button>
                 </CardContent>
                 <CardFooter>
-                <p className="text-sm text-center w-full text-gray-600">
+                <p className="text-sm text-center w-full text-muted-foreground">
                     Don't have an account?{' '}
-                    <Link href="/register" className="text-blue-600 hover:underline font-medium">
+                    <Link href="/register" className="text-primary hover:underline font-medium">
                     Sign up
                     </Link>
                 </p>

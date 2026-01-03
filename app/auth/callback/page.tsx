@@ -68,7 +68,7 @@ export default function AuthCallback() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <main className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-[400px] shadow-lg">
         <CardHeader>
           <CardTitle>

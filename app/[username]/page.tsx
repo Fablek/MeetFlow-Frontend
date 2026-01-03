@@ -55,7 +55,7 @@ export default function PublicProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading profile...</p>
@@ -66,7 +66,7 @@ export default function PublicProfilePage() {
 
   if (error || !profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="max-w-md w-full mx-4">
           <CardContent className="pt-6 text-center">
             <div className="text-6xl mb-4">😕</div>
@@ -84,12 +84,12 @@ export default function PublicProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Profile Header */}
         <div className="text-center mb-12">
           <div className="mb-4">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold">
+            <div className="w-24 h-24 bg-primary rounded-full mx-auto flex items-center justify-center text-primary-foreground text-3xl font-bold">
               {profile.fullName.charAt(0).toUpperCase()}
             </div>
           </div>

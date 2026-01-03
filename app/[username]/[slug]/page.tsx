@@ -150,7 +150,7 @@ export default function BookingPage() {
     const maxDate = addDays(today, 60); // 60 days from now
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 {availability && step !== 'confirmed' && (
