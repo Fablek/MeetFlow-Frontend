@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetFlow Widget Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .widget-container {
+            padding: 40px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+            text-align: center;
+        }
+        .info {
+            margin-top: 40px;
+            padding: 20px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            border-radius: 4px;
+        }
+        .info h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .info li {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MeetFlow Widget Test Page</h1>
+        <p>This page demonstrates the MeetFlow booking widget embedded on an external website.</p>
+
+        <div class="widget-container">
+            <h2>Book a Meeting</h2>
+            <p>Click the button below to test the widget:</p>
+
+            <!-- MeetFlow Widget - Replace with your actual configuration -->
+            <!-- MeetFlow Booking Widget -->
+            <script
+            src="http://localhost:3000/widget.js"
+            data-url="sebastian-pytka/poznaj-nas"
+            data-button-text="Book a meeting"
+            data-button-color="#006BFF"
+            ></script>
+        </div>
+
+        <div class="info">
+            <h3>How to Test:</h3>
+            <ul>
+                <li><strong>Step 1:</strong> Start your Next.js dev server (<code>npm run dev</code>)</li>
+                <li><strong>Step 2:</strong> Go to <code>/dashboard/embed</code> and copy the generated code</li>
+                <li><strong>Step 3:</strong> Replace the script tag above with your generated code</li>
+                <li><strong>Step 4:</strong> Open this HTML file in your browser</li>
+                <li><strong>Step 5:</strong> Click the button to test the booking modal</li>
+            </ul>
+        </div>
+
+        <div class="info" style="background: #fff3e0; border-left-color: #ff9800; margin-top: 20px;">
+            <h3>Note:</h3>
+            <p style="margin: 0;">
+                For production, change <code>http://localhost:3000</code> to your actual domain.
+                The widget will automatically work on any website once deployed.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

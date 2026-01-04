@@ -79,6 +79,12 @@ export default function Navbar() {
                             >
                                 Bookings
                             </Link>
+                            <Link
+                                href="/dashboard/embed"
+                                className="text-muted-foreground hover:text-primary px-3 py-2 text-sm font-medium transition-colors"
+                            >
+                                Embed
+                            </Link>
                         </div>
                     )}
 
