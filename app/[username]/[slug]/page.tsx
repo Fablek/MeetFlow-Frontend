@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { format, addDays, parseISO } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import Script from 'next/script';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -145,6 +146,36 @@ export default function BookingPage() {
 
     return (
         <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+            {/* JSON-LD Structured Data for SEO */}
+            {availability && (
+                <Script
+                    id="booking-jsonld"
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            '@context': 'https://schema.org',
+                            '@type': 'Service',
+                            name: availability.eventType.name,
+                            description: availability.eventType.description || 'Schedule a meeting',
+                            provider: {
+                                '@type': 'Person',
+                                name: username,
+                            },
+                            serviceType: 'Meeting Scheduling',
+                            availableChannel: {
+                                '@type': 'ServiceChannel',
+                                serviceUrl: typeof window !== 'undefined' ? window.location.href : '',
+                            },
+                            offers: {
+                                '@type': 'Offer',
+                                price: '0',
+                                priceCurrency: 'USD',
+                            },
+                        }),
+                    }}
+                />
+            )}
+
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 {availability && step !== 'confirmed' && (
