@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import AppLayout from '@/components/layout/AppLayout';
@@ -47,12 +47,7 @@ export default function EditEventTypePage() {
         maxDaysInAdvance: 60
     });
 
-    // Fetch event type
-    useEffect(() => {
-        fetchEventType();
-    }, [eventTypeId]);
-
-    const fetchEventType = async () => {
+    const fetchEventType = useCallback(async () => {
         try {
             const token = AuthService.getToken();
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/event-types/${eventTypeId}`, {
@@ -88,7 +83,12 @@ export default function EditEventTypePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [eventTypeId, router]);
+
+    // Fetch event type
+    useEffect(() => {
+        fetchEventType();
+    }, [fetchEventType]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;

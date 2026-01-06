@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import AppLayout from '@/components/layout/AppLayout';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
@@ -55,14 +55,6 @@ export default function BookingsPage() {
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null);
 
-    useEffect(() => {
-        fetchBookings();
-    }, []);
-
-    useEffect(() => {
-        filterBookings();
-    }, [bookings, filter]);
-
     const fetchBookings = async () => {
         setLoading(true);
         setError(null);
@@ -81,13 +73,12 @@ export default function BookingsPage() {
             setBookings(data);
         } catch (err) {
             setError('Failed to load bookings. Please try again.');
-            console.error('Error fetching bookings:', err);
         } finally {
             setLoading(false);
         }
     };
 
-    const filterBookings = () => {
+    const filterBookings = useCallback(() => {
         const now = new Date();
         let filtered = bookings;
 
@@ -118,7 +109,15 @@ export default function BookingsPage() {
         });
 
         setFilteredBookings(filtered);
-    };
+    }, [bookings, filter]);
+
+    useEffect(() => {
+        fetchBookings();
+    }, []);
+
+    useEffect(() => {
+        filterBookings();
+    }, [filterBookings]);
 
     const getStatusBadge = (status: string) => {
         if (status.toLowerCase() === 'confirmed') {

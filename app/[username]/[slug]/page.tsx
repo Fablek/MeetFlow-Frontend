@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { format, addDays, parseISO } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
@@ -33,14 +33,7 @@ export default function BookingPage() {
         notes: ''
     });
 
-    // Fetch availability when date is selected
-    useEffect(() => {
-        if (selectedDate) {
-            fetchAvailability(selectedDate);
-        }
-    }, [selectedDate]);
-
-    const fetchAvailability = async (date: Date) => {
+    const fetchAvailability = useCallback(async (date: Date) => {
         setLoading(true);
         setError(null);
 
@@ -74,7 +67,14 @@ export default function BookingPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [username, slug]);
+
+    // Fetch availability when date is selected
+    useEffect(() => {
+        if (selectedDate) {
+            fetchAvailability(selectedDate);
+        }
+    }, [selectedDate, fetchAvailability]);
 
     const handleSlotSelect = (slot: AvailableSlot) => {
         setSelectedSlot(slot);
@@ -86,18 +86,12 @@ export default function BookingPage() {
 
         if (!selectedSlot) return;
 
-        console.log('Selected slot:', selectedSlot);
-        console.log('Start time:', selectedSlot.start);
-
         setLoading(true);
         setError(null);
 
         try {
             const startTimeLocal = parseISO(selectedSlot.start);
             const startTimeUTC = startTimeLocal.toISOString();
-
-            console.log('Local time:', startTimeLocal);
-            console.log('UTC time:', startTimeUTC);
 
             const bookingRequest: CreateBookingRequest = {
                 guestName: formData.guestName,

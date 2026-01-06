@@ -13,6 +13,26 @@ import { Calendar, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { AuthService } from '@/lib/auth';
 import { User } from '@/types';
 
+interface ProfileTabProps {
+  user: User;
+  formData: {
+    fullName: string;
+    username: string;
+  };
+  loading: boolean;
+  success: boolean;
+  error: string | null;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+}
+
+interface GoogleIntegration {
+  isConnected: boolean;
+  email?: string;
+  calendarName?: string;
+  connectedAt?: string;
+}
+
 export default function SettingsProfilePage() {
   const router = useRouter();
   const searchParams = useSearchParams(); 
@@ -80,10 +100,6 @@ export default function SettingsProfilePage() {
         AuthService.setAuth(token!, data);
         setUser(data);
         setSuccess(true);
-        
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
       } else {
         setError(data.error || 'Update failed');
       }
@@ -161,7 +177,7 @@ export default function SettingsProfilePage() {
 }
 
 // Profile Tab Component
-function ProfileTab({ user, formData, loading, success, error, handleChange, handleSubmit }: any) {
+function ProfileTab({ user, formData, loading, success, error, handleChange, handleSubmit }: ProfileTabProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Left - Form */}
@@ -280,7 +296,7 @@ function ProfileTab({ user, formData, loading, success, error, handleChange, han
 
 // Integrations Tab Component
 function IntegrationsTab() {
-  const [integration, setIntegration] = useState<any>(null);
+  const [integration, setIntegration] = useState<GoogleIntegration | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [disconnecting, setDisconnecting] = useState(false);
@@ -293,9 +309,12 @@ function IntegrationsTab() {
       localStorage.removeItem('google_oauth_success');
       setShowSuccessMessage(true);
       // Hide message after 5 seconds
-      setTimeout(() => setShowSuccessMessage(false), 5000);
+      const timer = setTimeout(() => setShowSuccessMessage(false), 5000);
+
+      // Cleanup timeout on unmount
+      return () => clearTimeout(timer);
     }
-    
+
     fetchIntegrationStatus();
   }, []);
 
