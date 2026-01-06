@@ -270,20 +270,25 @@ export default function BookingPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                <div>
-                                    <Label htmlFor="guestName">Name *</Label>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="guestName" className="text-sm font-medium">
+                                        Name *
+                                    </Label>
                                     <Input
                                         id="guestName"
                                         required
                                         value={formData.guestName}
                                         onChange={(e) => setFormData({ ...formData, guestName: e.target.value })}
                                         placeholder="John Doe"
+                                        className="h-11"
                                     />
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="guestEmail">Email *</Label>
+                                <div className="space-y-2">
+                                    <Label htmlFor="guestEmail" className="text-sm font-medium">
+                                        Email *
+                                    </Label>
                                     <Input
                                         id="guestEmail"
                                         type="email"
@@ -291,28 +296,35 @@ export default function BookingPage() {
                                         value={formData.guestEmail}
                                         onChange={(e) => setFormData({ ...formData, guestEmail: e.target.value })}
                                         placeholder="john@example.com"
+                                        className="h-11"
                                     />
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="guestPhone">Phone (optional)</Label>
+                                <div className="space-y-2">
+                                    <Label htmlFor="guestPhone" className="text-sm font-medium">
+                                        Phone <span className="text-muted-foreground">(optional)</span>
+                                    </Label>
                                     <Input
                                         id="guestPhone"
                                         type="tel"
                                         value={formData.guestPhone}
                                         onChange={(e) => setFormData({ ...formData, guestPhone: e.target.value })}
                                         placeholder="+48 123 456 789"
+                                        className="h-11"
                                     />
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="notes">Additional Notes (optional)</Label>
+                                <div className="space-y-2">
+                                    <Label htmlFor="notes" className="text-sm font-medium">
+                                        Additional Notes <span className="text-muted-foreground">(optional)</span>
+                                    </Label>
                                     <Textarea
                                         id="notes"
                                         value={formData.notes}
                                         onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                                         placeholder="Any additional information..."
                                         rows={4}
+                                        className="resize-none"
                                     />
                                 </div>
 
