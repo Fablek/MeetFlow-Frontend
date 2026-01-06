@@ -71,7 +71,7 @@ export default function AuthCallback() {
     <main className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-[400px] shadow-lg">
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-center">
             {status === 'loading' && '⏳ Processing...'}
             {status === 'success' && '✅ Success!'}
             {status === 'error' && '❌ Error'}
